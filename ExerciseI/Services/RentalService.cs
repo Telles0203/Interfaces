@@ -13,12 +13,13 @@ namespace ExerciseI.Services
         public double PricePerHour { get; set; }
         public double PricePerDay { get; set; }
 
-        private BrasilTaxService _brasilTaxService = new BrasilTaxService();
+        private ITaxService _taxService;
 
-        public RentalService(double pricePerHour, double pricePerDay)
+        public RentalService(double pricePerHour, double pricePerDay, ITaxService taxService)
         {
             PricePerHour = pricePerHour;
             PricePerDay = pricePerDay;
+            _taxService = taxService;
         }
 
         public void ProcessInvoice(CarRental carRental)
@@ -26,7 +27,7 @@ namespace ExerciseI.Services
             TimeSpan duration = carRental.Finish.Subtract(carRental.Start);
             double basicPayment = (duration.TotalHours <= 12.00) ? basicPayment = PricePerHour * Math.Ceiling(duration.TotalHours) : basicPayment = PricePerDay * Math.Ceiling(duration.TotalDays);
 
-            double tax = _brasilTaxService.Tax(basicPayment);
+            double tax = _taxService.Tax(basicPayment);
 
             carRental.Invoice = new Invoice(basicPayment, tax);
         }

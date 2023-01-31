@@ -26,7 +26,7 @@ namespace ExerciseI
             double pricePerDay = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
 
             CarRental carRental = new CarRental(start, finish, new Vehicle(model));
-            RentalService rentalService = new RentalService(pricePerHour, pricePerDay);
+            RentalService rentalService = new RentalService(pricePerHour, pricePerDay, new BrasilTaxService());
             rentalService.ProcessInvoice(carRental);
 
             Console.WriteLine();
